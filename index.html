@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Am I Feeling Down?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #ede8e0;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      gap: 18px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 52px 48px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.05),
+        0 12px 40px rgba(0,0,0,0.07);
+    }
+
+    @media (max-width: 560px) {
+      .card { padding: 36px 28px; border-radius: 20px; }
+    }
+
+    /* ── Animations ── */
+
+    .screen {
+      animation: appear 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Typography ── */
+
+    .icon {
+      font-size: 46px;
+      line-height: 1;
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 600;
+      color: #1c1818;
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1c1818;
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 15.5px;
+      line-height: 1.72;
+      color: #4c4646;
+    }
+
+    p + p {
+      margin-top: 12px;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #8c8282;
+      font-style: italic;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    /* ── Progress ── */
+
+    .progress {
+      margin-bottom: 40px;
+    }
+
+    .progress-meta {
+      font-size: 13px;
+      font-weight: 500;
+      color: #a09898;
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      height: 4px;
+      background: #f0ece6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7caad6, #79bf9e);
+      border-radius: 4px;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ── Buttons ── */
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 36px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      line-height: 1;
+      touch-action: manipulation;
+      transition:
+        transform 0.12s ease,
+        filter 0.12s ease,
+        box-shadow 0.12s ease;
+    }
+
+    .btn:hover  { transform: translateY(-1px); filter: brightness(0.95); }
+    .btn:active { transform: translateY(0px);  filter: brightness(0.88); }
+
+    .btn-start {
+      background: #5580ae;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(85,128,174,0.35);
+    }
+
+    .btn-yes {
+      background: #3d8a5e;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(61,138,94,0.3);
+    }
+
+    .btn-no {
+      background: #ede8e0;
+      color: #5a5050;
+    }
+
+    .btn-continue {
+      background: #5580ae;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(85,128,174,0.3);
+    }
+
+    .btn-ghost {
+      background: #ede8e0;
+      color: #5a5050;
+    }
+
+    .btn-full {
+      flex: none;
+      width: 100%;
+    }
+
+    /* ── Info panels ── */
+
+    .panel {
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-top: 22px;
+    }
+
+    .panel-suggestion {
+      background: #f0f9f4;
+      border-left: 3px solid #3d8a5e;
+    }
+
+    .panel-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #3d8a5e;
+    }
+
+    .panel p {
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* ── Divider ── */
+
+    .divider {
+      height: 1px;
+      background: #f0ece6;
+      margin-top: 28px;
+    }
+
+    /* ── Footer ── */
+
+    .footer {
+      font-size: 12.5px;
+      color: #b8b0b0;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 420px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="card" class="card"></div>
+
+  <p class="footer">
+    For reflection only — not a substitute for professional advice.<br>
+    If you're struggling, please reach out to a mental health professional.
+  </p>
+
+  <!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  CONFIGURATION                                       ║
+  ║  Edit the JSON below to change questions and text.  ║
+  ╚══════════════════════════════════════════════════════╝
+
+  Each question has:
+    question   — The yes/no question to ask
+    hint       — Clarifying subtext shown below the question (can be "")
+    emoji      — Shown on the insight screen
+    insight    — Why this topic might be affecting mood
+    suggestion — A concrete, actionable next step
+  -->
+  <script id="config" type="application/json">
+  {
+    "welcomeTitle": "Why am I feeling down?",
+    "welcomeSubtitle": "Let's explore what might be going on. Answer a few simple questions as honestly as you can — there are no wrong answers.",
+
+    "allGoodTitle": "You're covering all the basics.",
+    "allGoodBody": "That's genuinely good to hear. Sometimes low moods arrive without a clear external reason — and that's okay. Feelings aren't always logical, and you don't need to justify them.\n\nIf this feeling sticks around, it might be worth talking to someone you trust, or a mental health professional. You don't have to figure everything out alone.",
+
+    "finishedTitle": "You've explored everything.",
+    "finishedBody": "Hopefully something in there was useful. If a question stood out, that's a good place to start — one small step at a time.\n\nIf things feel persistently hard, please reach out to a friend, family member, or a mental health professional. You deserve support.",
+
+    "questions": [
+      {
+        "id": "sleep",
+        "question": "Have you been sleeping 7–9 hours a night?",
+        "hint": "Think about the last few nights",
+        "emoji": "😴",
+        "insight": "Sleep is one of the most powerful regulators of mood. Even one or two nights of poor sleep can make emotions feel more intense, small problems feel bigger, and your energy disappear. After a few rough nights, almost everything starts to feel harder than it actually is.",
+        "suggestion": "Try going to bed 30 minutes earlier tonight. A consistent wake time, a cool and dark room, and avoiding screens in the hour before bed can all make a real difference."
+      },
+      {
+        "id": "water",
+        "question": "Have you had enough water today?",
+        "hint": "Aim for around 6–8 glasses",
+        "emoji": "💧",
+        "insight": "Even mild dehydration — before you feel thirsty — can cause fatigue, difficulty concentrating, and a noticeably lower mood. It's one of the most overlooked and easiest-to-fix causes of feeling off.",
+        "suggestion": "Drink a glass of water right now. Then try keeping a glass or bottle somewhere visible throughout the day as a gentle reminder to keep sipping."
+      },
+      {
+        "id": "food",
+        "question": "Have you eaten a proper meal today?",
+        "hint": "Something balanced, not just a snack",
+        "emoji": "🥗",
+        "insight": "Blood sugar crashes can cause irritability, low energy, and low mood that's easy to mistake for something deeper. Skipping meals or leaning on sugar creates spikes and crashes that affect how you feel emotionally — sometimes for hours.",
+        "suggestion": "Eat something nourishing soon if you haven't. Aim for a mix of protein, healthy fats, and complex carbohydrates — foods that release energy steadily rather than spiking and crashing."
+      },
+      {
+        "id": "movement",
+        "question": "Have you moved your body in the last day or two?",
+        "hint": "Exercise, a walk, dancing — anything counts",
+        "emoji": "🚶",
+        "insight": "Physical movement is one of the most reliably mood-boosting things you can do. It releases endorphins, reduces stress hormones, and gives your brain a genuine chemical lift — effects that can last for hours after you stop.",
+        "suggestion": "Go for even a 10–15 minute walk, ideally outside. You don't need a gym or a plan. Just moving your body — especially in fresh air — can noticeably shift your mood."
+      },
+      {
+        "id": "sunlight",
+        "question": "Have you been outside in natural light today?",
+        "hint": "Even on cloudy days, outdoor light helps",
+        "emoji": "🌤️",
+        "insight": "Natural light helps regulate serotonin and your body's internal clock. People who spend little time outdoors — especially during darker months — often experience a quiet but real drag on their mood and energy that builds gradually over days.",
+        "suggestion": "Step outside for at least 10–15 minutes, ideally in the morning. You don't need sunshine — even diffuse daylight through clouds is far more effective than indoor lighting."
+      },
+      {
+        "id": "social",
+        "question": "Have you genuinely connected with someone you care about recently?",
+        "hint": "A real conversation, not just a quick text",
+        "emoji": "🤝",
+        "insight": "Humans are wired for connection. Loneliness and isolation are among the strongest predictors of low mood — and they can creep up without you realizing it, especially when life is busy and contact becomes more shallow.",
+        "suggestion": "Reach out to someone today. A phone call or meeting in person is more nourishing than texting. Even a short, genuine conversation with someone you trust can make a real difference."
+      },
+      {
+        "id": "purpose",
+        "question": "Have you done something that felt meaningful or engaging recently?",
+        "hint": "Work, a project, helping someone, a hobby",
+        "emoji": "✨",
+        "insight": "Having a sense of purpose — doing things that matter to you or contribute to others — is a core component of wellbeing. Without it, days can start to feel empty or pointless even when nothing is technically wrong.",
+        "suggestion": "Think about what activities give you a sense of flow, contribution, or meaning. Try to do one today, even in a small way. It doesn't have to be grand — it just has to feel like it matters."
+      },
+      {
+        "id": "stress",
+        "question": "Have your stress levels been manageable lately?",
+        "hint": "Consider work, relationships, finances, health",
+        "emoji": "🌊",
+        "insight": "Chronic or unmanaged stress quietly depletes your emotional reserves. When stress builds without adequate release, it often surfaces as low mood, irritability, or a general flatness — even when you can't clearly name the source.",
+        "suggestion": "Try to name one specific stressor you could address, reduce, or temporarily set aside. Even 5 minutes of slow, deep breathing can meaningfully lower stress hormones in the moment."
+      },
+      {
+        "id": "screens",
+        "question": "Have you taken breaks from screens and social media today?",
+        "hint": "Not just your phone — news, TV, all of it",
+        "emoji": "📵",
+        "insight": "Heavy screen use — especially social media scrolling — is consistently linked to lower mood. Comparison, passive consumption, and a constant stream of information keep your nervous system activated without giving it real rest.",
+        "suggestion": "Try putting your phone away for an hour and doing something offline. Notice how you feel when you come back. Even a short break from screens can be surprisingly refreshing."
+      },
+      {
+        "id": "alcohol",
+        "question": "Have you been limiting alcohol recently?",
+        "hint": "Even a few drinks can affect mood for a day or two",
+        "emoji": "🍷",
+        "insight": "Alcohol is a depressant. Even moderate drinking disrupts sleep quality, depletes mood-regulating neurotransmitters, and can leave you feeling lower for a day or two after — often in ways that aren't obviously connected to the drinking.",
+        "suggestion": "Try skipping alcohol for a few days and notice whether your baseline mood and sleep quality improve. Many people are genuinely surprised by the difference."
+      },
+      {
+        "id": "anticipation",
+        "question": "Do you have something you're looking forward to?",
+        "hint": "Big or small — it all counts",
+        "emoji": "🎉",
+        "insight": "Positive anticipation is a genuine and reliable source of wellbeing. Without things to look forward to, days can blur together and the present can feel dreary. Even a small upcoming pleasure can shift how you experience right now.",
+        "suggestion": "Plan something enjoyable, even if it's modest: a meal you love, a walk somewhere new, a call with a friend, a book you've been meaning to read. Put it in your calendar so it feels real."
+      },
+      {
+        "id": "self-compassion",
+        "question": "Have you been kind to yourself lately?",
+        "hint": "Notice the tone of your inner voice",
+        "emoji": "🫂",
+        "insight": "Harsh self-criticism and negative self-talk quietly create and deepen low moods. Many people are far more forgiving of others than themselves — and that gap takes a real toll, wearing down your sense of worth and resilience over time.",
+        "suggestion": "Try to speak to yourself the way you'd speak to a good friend going through the same thing. If you catch your inner voice being hard on you, gently redirect it. Self-compassion is a skill, not self-indulgence."
+      },
+      {
+        "id": "rest",
+        "question": "Have you had time to genuinely rest and decompress?",
+        "hint": "Not just sleep — unstructured time with no demands",
+        "emoji": "🛋️",
+        "insight": "Constant busyness without recovery leads to emotional exhaustion, even when you're sleeping enough. Your mind and nervous system need unstructured time to process and restore — not just switching from one obligation to the next.",
+        "suggestion": "Try to carve out some genuinely unstructured time today. No tasks, no scrolling, no goals — just rest. It might feel uncomfortable at first, but it's genuinely restorative."
+      },
+      {
+        "id": "creativity",
+        "question": "Have you done something creative or just for fun recently?",
+        "hint": "Cooking, drawing, music, games — anything playful",
+        "emoji": "🎨",
+        "insight": "Play and creative expression are genuine psychological needs, not luxuries. Without them, life can start to feel like an endless series of obligations. Joy and lightness don't happen by accident — they need to be actively cultivated.",
+        "suggestion": "Do something purely for enjoyment today — with no goal beyond the doing of it. Draw, cook something new, play music, write, play a game, or revisit something you used to love."
+      },
+      {
+        "id": "caffeine",
+        "question": "Has your caffeine intake been moderate today?",
+        "hint": "Too much can cause anxiety and disrupt sleep",
+        "emoji": "☕",
+        "insight": "Excess caffeine can cause anxiety, restlessness, and irritability that's easy to misread as a deeper emotional problem. It also disrupts sleep quality even when consumed in the afternoon, often creating a cycle that's hard to notice.",
+        "suggestion": "Try switching to water or herbal tea after midday. If you've had a lot today, consider gradually reducing your intake over the next few days rather than stopping all at once."
+      }
+    ]
+  }
+  </script>
+
+  <script>
+    const config = JSON.parse(document.getElementById('config').textContent);
+    const card = document.getElementById('card');
+
+    let questions = [];
+    let currentIndex = 0;
+    let answeredNo = false;
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function render(html) {
+      card.innerHTML = `<div class="screen">${html}</div>`;
+    }
+
+    function start() {
+      questions = shuffle(config.questions);
+      currentIndex = 0;
+      answeredNo = false;
+      showWelcome();
+    }
+
+    function showWelcome() {
+      render(`
+        <span class="icon">🌱</span>
+        <h1>${config.welcomeTitle}</h1>
+        <p>${config.welcomeSubtitle}</p>
+        <div class="actions">
+          <button class="btn btn-start btn-full" onclick="showQuestion()">Let's find out</button>
+        </div>
+      `);
+    }
+
+    function showQuestion() {
+      if (currentIndex >= questions.length) {
+        showDone();
+        return;
+      }
+
+      const q = questions[currentIndex];
+      const pct = Math.round((currentIndex / questions.length) * 100);
+
+      render(`
+        <div class="progress">
+          <div class="progress-meta">Question ${currentIndex + 1} of ${questions.length}</div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+        <h2>${q.question}</h2>
+        ${q.hint ? `<p class="hint">${q.hint}</p>` : ''}
+        <div class="actions" style="margin-top:32px;">
+          <button class="btn btn-no" onclick="handleNo()">Not really</button>
+          <button class="btn btn-yes" onclick="handleYes()">Yes</button>
+        </div>
+      `);
+    }
+
+    function handleYes() {
+      currentIndex++;
+      showQuestion();
+    }
+
+    function handleNo() {
+      const q = questions[currentIndex];
+      answeredNo = true;
+      currentIndex++;
+      showInsight(q);
+    }
+
+    function showInsight(q) {
+      const hasMore = currentIndex < questions.length;
+
+      render(`
+        <span class="icon">${q.emoji}</span>
+        <h2>That might be it.</h2>
+        <p>${q.insight}</p>
+        <div class="panel panel-suggestion">
+          <div class="panel-label">Try this</div>
+          <p>${q.suggestion}</p>
+        </div>
+        <div class="divider"></div>
+        <div class="actions" style="margin-top:28px;">
+          <button class="btn btn-ghost" onclick="start()">Start over</button>
+          ${hasMore
+            ? `<button class="btn btn-continue" onclick="showQuestion()">Keep exploring</button>`
+            : `<button class="btn btn-continue" onclick="showDone()">All done</button>`
+          }
+        </div>
+      `);
+    }
+
+    function showDone() {
+      const isAllGood = !answeredNo;
+      const title = isAllGood ? config.allGoodTitle : config.finishedTitle;
+      const body  = isAllGood ? config.allGoodBody  : config.finishedBody;
+      const emoji = isAllGood ? '🌟' : '🙏';
+      const paragraphs = body
+        .split('\n')
+        .filter(s => s.trim())
+        .map(s => `<p>${s}</p>`)
+        .join('');
+
+      render(`
+        <span class="icon">${emoji}</span>
+        <h2>${title}</h2>
+        ${paragraphs}
+        <div class="actions" style="margin-top:36px;">
+          <button class="btn btn-ghost btn-full" onclick="start()">Start over</button>
+        </div>
+      `);
+    }
+
+    // Boot
+    start();
+  </script>
+</body>
+</html>

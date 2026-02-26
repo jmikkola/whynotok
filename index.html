@@ -221,11 +221,84 @@
       line-height: 1.6;
       max-width: 420px;
     }
+
+    /* ── Answer log ── */
+
+    .log {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 190px;
+      max-height: 72vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    @media (max-width: 980px) {
+      .log { display: none; }
+    }
+
+    @keyframes log-in {
+      from { opacity: 0; transform: translateX(10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .log-entry {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+      animation: log-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .log-emoji {
+      font-size: 15px;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .log-content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .log-question {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: #5a5050;
+    }
+
+    .log-badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 2px 6px;
+      align-self: flex-start;
+    }
+
+    .log-badge-yes {
+      background: #e8f5ee;
+      color: #3d8a5e;
+    }
+
+    .log-badge-no {
+      background: #f0ece6;
+      color: #8c8282;
+    }
   </style>
 </head>
 
 <body>
   <div id="card" class="card"></div>
+  <div id="log" class="log"></div>
 
   <p class="footer">
     For reflection only — not a substitute for professional advice.<br>
@@ -384,10 +457,27 @@
   <script>
     const config = JSON.parse(document.getElementById('config').textContent);
     const card = document.getElementById('card');
+    const logEl = document.getElementById('log');
 
     let questions = [];
     let currentIndex = 0;
     let answeredNo = false;
+    let answerLog = [];
+
+    function addToLog(q, isYes) {
+      answerLog.push({ q, isYes });
+      const entry = document.createElement('div');
+      entry.className = `log-entry`;
+      entry.innerHTML = `
+        <span class="log-emoji">${q.emoji}</span>
+        <div class="log-content">
+          <span class="log-question">${q.question}</span>
+          <span class="log-badge ${isYes ? 'log-badge-yes' : 'log-badge-no'}">${isYes ? 'Yes' : 'Not really'}</span>
+        </div>
+      `;
+      logEl.appendChild(entry);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
 
     function shuffle(arr) {
       const a = [...arr];
@@ -406,6 +496,8 @@
       questions = shuffle(config.questions);
       currentIndex = 0;
       answeredNo = false;
+      answerLog = [];
+      logEl.innerHTML = '';
       showQuestion();
     }
 
@@ -435,6 +527,7 @@
     }
 
     function handleYes() {
+      addToLog(questions[currentIndex], true);
       currentIndex++;
       showQuestion();
     }
@@ -442,6 +535,7 @@
     function handleNo() {
       const q = questions[currentIndex];
       answeredNo = true;
+      addToLog(q, false);
       currentIndex++;
       showInsight(q);
     }

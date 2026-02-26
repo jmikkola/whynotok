@@ -44,6 +44,6 @@ All content is stored in a `<script id="config" type="application/json">` block 
 
 ## Deployment
 
-Upload `site/index.html` to S3 (or any static host) and serve it. No CORS configuration needed — all assets are either inline or loaded from Google Fonts CDN.
+Upload `docs/index.html` to S3 (or any static host) and serve it. No CORS configuration needed — all assets are either inline or loaded from Google Fonts CDN.
 
 To preview locally, open the file directly in a browser (no server needed — there are no fetch calls).

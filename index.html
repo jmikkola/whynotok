@@ -150,12 +150,6 @@
     .btn:hover  { transform: translateY(-1px); filter: brightness(0.95); }
     .btn:active { transform: translateY(0px);  filter: brightness(0.88); }
 
-    .btn-start {
-      background: #5580ae;
-      color: #fff;
-      box-shadow: 0 2px 10px rgba(85,128,174,0.35);
-    }
-
     .btn-yes {
       background: #3d8a5e;
       color: #fff;
@@ -412,18 +406,7 @@
       questions = shuffle(config.questions);
       currentIndex = 0;
       answeredNo = false;
-      showWelcome();
-    }
-
-    function showWelcome() {
-      render(`
-        <span class="icon">🌱</span>
-        <h1>${config.welcomeTitle}</h1>
-        <p>${config.welcomeSubtitle}</p>
-        <div class="actions">
-          <button class="btn btn-start btn-full" onclick="showQuestion()">Let's find out</button>
-        </div>
-      `);
+      showQuestion();
     }
 
     function showQuestion() {
